@@ -4,9 +4,22 @@ import { useState } from 'react'
 const Home: NextPage = () => {
 	const [username, setUsername] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
+	const [result, setResult] = useState<string>('')
 
-	const handleSubmit = () => {
-
+	const handleSubmit = async () => {
+		const url = "http://localhost:3000/api/auth"
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				username,
+				password
+			})
+		})
+		const data = await response.json()
+		setResult(data.status)
 	}
 
 
@@ -27,6 +40,7 @@ const Home: NextPage = () => {
 			<div className="w-full grid grid-cols-12 align-center">
 				<div className="col-span-4"></div>
 				<div className="flex flex-col bg-[#e1e1e1] items-center my-5 col-span-4">
+					<div className="text-xl font-bold text-red-500">{result}</div>
 					<div className="text-xl font-bold">Signup</div>
 					<hr />
 					<label htmlFor="username">Username</label>
